@@ -5,32 +5,37 @@
   var d = document, de = d.documentElement;
   de.classList.add('js');
 
-  /* ---- mobil menü + almenü ---- */
-  var burger = d.querySelector('.burger'), nav = d.getElementById('nav');
-  function setNav(open) {
-    if (!burger || !nav) return;
-    nav.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    burger.setAttribute('aria-label', open ? 'Menü bezárása' : 'Menü megnyitása');
-    d.body.style.overflow = open && matchMedia('(max-width:1060px)').matches ? 'hidden' : '';
+  /* ---- teljes képernyős menü ---- */
+  var mbtn = d.getElementById('menu-btn'), menu = d.getElementById('menu');
+  if (mbtn && menu) {
+    var mimg = d.getElementById('menu-img'), mlinks = menu.querySelectorAll('.menu-nav a'), isOpen = false;
+    var setMenu = function (open) {
+      isOpen = open;
+      menu.classList.toggle('open', open);
+      if (open) menu.removeAttribute('inert'); else menu.setAttribute('inert', '');
+      de.classList.toggle('menu-open', open);
+      mbtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mbtn.querySelector('.mb-t').textContent = open ? 'Bezár' : 'Menü';
+      d.body.style.overflow = open ? 'hidden' : '';
+      if (open) { var c = menu.querySelector('.menu-nav a[aria-current]') || mlinks[0]; setTimeout(function () { c.focus(); }, 60); }
+      else mbtn.focus();
+    };
+    mbtn.addEventListener('click', function () { setMenu(!isOpen); });
+    mlinks.forEach(function (a) {
+      var show = function () { var u = a.getAttribute('data-img'); if (u && mimg && mimg.getAttribute('src') !== u) { mimg.style.opacity = 0; setTimeout(function () { mimg.src = u; mimg.style.opacity = 1; }, 120); } };
+      a.addEventListener('mouseenter', show); a.addEventListener('focus', show);
+      a.addEventListener('click', function () { if (a.pathname === location.pathname) setMenu(false); });
+    });
+    d.addEventListener('keydown', function (e) {
+      if (!isOpen) return;
+      if (e.key === 'Escape') { setMenu(false); return; }
+      if (e.key === 'Tab') {
+        var f = [mbtn].concat([].slice.call(menu.querySelectorAll('a'))), i = f.indexOf(d.activeElement);
+        if (e.shiftKey && (i <= 0)) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+    });
   }
-  if (burger) burger.addEventListener('click', function () { setNav(burger.getAttribute('aria-expanded') !== 'true'); });
-  var subBtn = d.querySelector('.nav-btn'), sub = d.getElementById('sub-sz');
-  function setSub(open) {
-    if (!subBtn || !sub) return;
-    sub.classList.toggle('open', open);
-    subBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
-  if (subBtn) {
-    subBtn.addEventListener('click', function (e) { e.stopPropagation(); setSub(subBtn.getAttribute('aria-expanded') !== 'true'); });
-    d.addEventListener('click', function (e) { if (!sub.contains(e.target) && e.target !== subBtn) setSub(false); });
-    var hs = subBtn.parentElement;
-    hs.addEventListener('focusout', function (e) { if (!hs.contains(e.relatedTarget)) setSub(false); });
-  }
-  d.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { setSub(false); setNav(false); }
-  });
-  matchMedia('(min-width:1061px)').addEventListener('change', function () { setNav(false); });
 
   /* ---- megjelenés-animáció (IntersectionObserver) ---- */
   var rv = d.querySelectorAll('.rv');
