@@ -44,20 +44,23 @@
   /* ---- referencia-szűrő ---- */
   var fbar = d.querySelector('.filters');
   if (fbar) {
-    var cards = d.querySelectorAll('.pgrid .pcard'), cnt = fbar.querySelector('.count');
-    var btns = fbar.querySelectorAll('button[data-f]');
-    function apply(f) {
+    var cards = d.querySelectorAll('.pgrid .pcard'), cnt = d.getElementById('pcount');
+    var btns = d.querySelectorAll('button[data-f]'), groups = d.querySelectorAll('.pgroup'), empty = d.getElementById('pempty');
+    var apply = function (f, push) {
       var n = 0;
       cards.forEach(function (c) {
         var show = f === 'all' || (c.getAttribute('data-cat') || '').split(',').indexOf(f) > -1;
         c.hidden = !show; if (show) n++;
       });
-      btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-f') === f ? 'true' : 'false'); });
+      groups.forEach(function (g) { g.hidden = !g.querySelector('.pcard:not([hidden])'); });
+      fbar.querySelectorAll('button[data-f]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-f') === f ? 'true' : 'false'); });
       if (cnt) cnt.textContent = n + ' referencia';
-    }
-    btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.getAttribute('data-f')); }); });
+      if (empty) empty.hidden = n > 0;
+      if (push && history.replaceState) history.replaceState(null, '', f === 'all' ? location.pathname : '#' + f);
+    };
+    btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.getAttribute('data-f'), true); }); });
     var h = (location.hash || '').replace('#', '');
-    if (h && fbar.querySelector('[data-f="' + h + '"]')) apply(h);
+    if (h && fbar.querySelector('[data-f="' + h + '"]')) apply(h, false);
   }
 
   /* ---- galéria lightbox (<dialog>) ---- */
