@@ -82,7 +82,7 @@
    Nincs dőlt betű (font-synthesis: none), nincs szó közbeni sortörés (overflow-wrap: normal). */
 
 :root {
-  /* szín: hideg betonszürke + grafit; a logó olívazöldje tömör márkafelület (hős, ajánlat-sáv) */
+  /* szín: hideg betonszürke + grafit; a logó olívazöldje CSAK jelölő (négyzet, számok, vékony vonal) – tömör felületen nem (2026-10-16) */
   --stone: #ebebe7;
   --stone-2: #dcddd7;
   --paper: #f5f5f2;
@@ -94,6 +94,7 @@
   --olive-d: #5d7218;    /* tömör márkafelület, fehér szöveggel 5.5:1 */
   --lime: #b9cc57;       /* kiemelés sötét alapon */
   --night: #131412;
+  --slab: #1d1f1c;       /* grafit tábla: hős, ajánlat-sáv */
   --line: rgba(18, 19, 17, .16);
   --line-strong: rgba(18, 19, 17, .4);
   --on-dark: #ecece6;
@@ -165,7 +166,7 @@ button { font: inherit; color: inherit; }
   font: 600 .95rem/1 var(--sans); letter-spacing: .01em; text-decoration: none; cursor: pointer;
   transition: background .22s, color .22s, border-color .22s;
 }
-.btn:hover { background: var(--olive-d); border-color: var(--olive-d); color: #fff; }
+.btn:hover { background: var(--ink-2); border-color: var(--ink-2); color: #fff; }
 .btn--ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
 .btn--ghost:hover { background: var(--ink); color: var(--stone); border-color: var(--ink); }
 .btn--light { background: var(--stone); color: var(--ink); border-color: var(--stone); }
@@ -226,7 +227,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------- hős: tömör olíva tábla + fotó, hézag nélkül ---------- */
 .hero { padding-block: clamp(20px, 2.6vw, 36px) 0; }
-.hero-plate { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); background: var(--olive-d); color: #fff; min-height: clamp(480px, 46vw, 640px); }
+.hero-plate { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); background: var(--slab); color: #fff; min-height: clamp(480px, 46vw, 640px); }
 .hero-copy { padding: clamp(28px, 4vw, 60px); display: flex; flex-direction: column; justify-content: space-between; gap: 32px; }
 .hero-copy h1 { margin: 0; }
 .hero-copy .lead { color: rgba(255, 255, 255, .92); margin: 0; }
@@ -354,7 +355,7 @@ button { font: inherit; color: inherit; }
 .cta-contact a, .cta-contact div { display: flex; flex-direction: column; gap: 2px; padding: 16px 0; border-bottom: 1px solid rgba(237,234,224,.25); text-decoration: none; }
 .cta-contact small { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--on-dark-mute); }
 .cta-contact b { font: 500 clamp(1.25rem, 1.8vw, 1.6rem)/1.25 var(--display); letter-spacing: -.015em; }
-.cta-contact a:hover b { color: #c5d25f; }
+.cta-contact a:hover b { color: var(--lime); }
 @media (max-width: 900px) { .cta-l, .cta-r { grid-column: 1 / -1; } }
 
 /* ---------- aloldal-fej: vastag grafit gerenda-vonal + olíva jelölő ---------- */
@@ -554,7 +555,7 @@ h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: 
 .facts ul { padding-inline: clamp(16px, 2.4vw, 32px); }
 .facts li { border-right-color: var(--line-strong); }
 .facts b { font: 700 clamp(1.5rem, 2.5vw, 2.3rem)/1.05 var(--display); letter-spacing: -.01em; }
-.step::before { font: 700 clamp(2rem, 3vw, 2.8rem)/1 var(--display); color: var(--olive); }
+.step::before { font: 700 clamp(2rem, 3vw, 2.8rem)/1 var(--display); color: var(--ink); border-top: 3px solid var(--olive); padding-top: 14px; display: block; width: fit-content; }
 .stage h3, .srow h3 { font-weight: 600; }
 .srow h3 { font-size: clamp(1.4rem, 2vw, 1.8rem); }
 .pts h3, .step h3, .v h3 { font-size: 1.3rem; }
@@ -581,8 +582,9 @@ h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: 
 .dbl .cap { color: var(--mute); border-color: var(--line-strong); }
 
 /* ---------- CTA: tömör olívazöld márkasáv ---------- */
-.cta { background: var(--olive-d); color: #fff; }
-.cta .eyebrow { color: #fff; } .cta .eyebrow::before { background: #fff; }
+.cta { background: var(--slab); color: #fff; }
+.cta .eyebrow { color: #fff; } .cta .eyebrow::before { background: var(--olive); }
+.hero-plate .tag::before { background: var(--olive); }
 .cta .lead { color: rgba(255, 255, 255, .92); }
 .cta-contact, .cta-contact a, .cta-contact div { border-color: rgba(255, 255, 255, .4); }
 .cta-contact small { color: rgba(255, 255, 255, .8); }
@@ -592,7 +594,7 @@ h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: 
 .cta :focus-visible { outline-color: #fff; }
 
 /* ---------- lábléc: grafit ---------- */
-.ftr { background: var(--night); border-top: 0; }
+.ftr { background: var(--night); border-top: 1px solid rgba(255, 255, 255, .09); }
 
 /* ---------- 2026-10-16: aloldal-fej utáni ritmus, projekt-borító, fotó nélküli szakterület-csempe ---------- */
 .phead { padding-bottom: clamp(28px, 3.4vw, 48px); }
@@ -605,7 +607,7 @@ h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: 
 .srow .th--type { display: flex; align-items: flex-end; background: var(--night); padding: 12px 14px; border-left: 4px solid var(--olive); }
 .srow .th--type ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
 .srow .th--type li { font: 600 .82rem/1.25 var(--display); color: #fff; letter-spacing: .01em; }
-.srow:hover .th--type { background: var(--olive-d); }
+.srow:hover .th--type { background: var(--ink-2); }
 @media (max-width: 900px) { .srow .th--type { padding: 8px 10px; } .srow .th--type li { font-size: .7rem; } }
 @media (max-width: 520px) { .srow .th--type li:nth-child(n+2) { display: none; } }
 .srow .th--type { overflow: hidden; }
